@@ -13,6 +13,7 @@ import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.upstream.RawResourceDataSource;
+import android.widget.Toast;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -120,6 +121,7 @@ public class ReactExoplayerViewManager extends ViewGroupManager<ReactExoplayerVi
 
         if (startsWithValidScheme(uriString)) {
             String src = cacheManager.cache( uriString );
+            Toast.makeText(context, "Src " + src, Toast.LENGTH_LONG).show();
             // Uri srcUri = Uri.parse(uriString);
 
             if (srcUri != null) {
