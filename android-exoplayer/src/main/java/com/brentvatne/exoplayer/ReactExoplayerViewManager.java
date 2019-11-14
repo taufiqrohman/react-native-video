@@ -61,6 +61,7 @@ public class ReactExoplayerViewManager extends ViewGroupManager<ReactExoplayerVi
     private static final String PROP_CONTROLS = "controls";
 
     private ReactExoplayerConfig config;
+    private CacheManager cacheManager;
 
     public ReactExoplayerViewManager(ReactExoplayerConfig config) {
         this.config = config;
@@ -103,6 +104,11 @@ public class ReactExoplayerViewManager extends ViewGroupManager<ReactExoplayerVi
     @ReactProp(name = PROP_SRC)
     public void setSrc(final ReactExoplayerView videoView, @Nullable ReadableMap src) {
         Context context = videoView.getContext().getApplicationContext();
+
+        if (cacheManager != null) {
+            cacheManager = new CacheManager(context);
+        }
+
         String uriString = src.hasKey(PROP_SRC_URI) ? src.getString(PROP_SRC_URI) : null;
         String extension = src.hasKey(PROP_SRC_TYPE) ? src.getString(PROP_SRC_TYPE) : null;
         Map<String, String> headers = src.hasKey(PROP_SRC_HEADERS) ? toStringMap(src.getMap(PROP_SRC_HEADERS)) : null;
@@ -113,7 +119,8 @@ public class ReactExoplayerViewManager extends ViewGroupManager<ReactExoplayerVi
         }
 
         if (startsWithValidScheme(uriString)) {
-            Uri srcUri = Uri.parse(uriString);
+            String src = cacheManager.cache( uriString );
+            // Uri srcUri = Uri.parse(uriString);
 
             if (srcUri != null) {
                 videoView.setSrc(srcUri, extension, headers);
